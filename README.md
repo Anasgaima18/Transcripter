@@ -355,9 +355,9 @@ VITE_ENABLE_DEBUG=true
 # Backend Production (.env.production)
 NODE_ENV=production
 PORT=5000
-MONGODB_URI=mongodb+srv://prod-user:secure-password@prod-cluster.mongodb.net/transcripter
-JWT_SECRET=ultra_secure_production_jwt_secret_64_characters_minimum
-SARVAM_API_KEY=production_sarvam_api_key
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/transcripter
+JWT_SECRET=<your-secure-jwt-secret-64-characters-minimum>
+SARVAM_API_KEY=<your-production-sarvam-api-key>
 RATE_LIMIT_MAX_REQUESTS=500
 ```
 
@@ -903,14 +903,14 @@ NODE_ENV=production
 PORT=5000
 
 # Database (MongoDB Atlas recommended for production)
-MONGODB_URI=mongodb+srv://prod-user:secure-password@prod-cluster.mongodb.net/transcripter
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/transcripter
 
 # Security
-JWT_SECRET=ultra_secure_production_jwt_secret_64_characters_minimum
-SESSION_SECRET=another_ultra_secure_session_secret_for_production
+JWT_SECRET=<your-secure-jwt-secret-64-characters-minimum>
+SESSION_SECRET=<your-secure-session-secret-for-production>
 
 # AI Service
-SARVAM_API_KEY=production_sarvam_api_key
+SARVAM_API_KEY=<your-production-sarvam-api-key>
 
 # Rate Limiting
 RATE_LIMIT_WINDOW_MS=900000
