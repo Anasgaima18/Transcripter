@@ -1639,7 +1639,7 @@ For complete license information, see the `LICENSE` file in the repository.
 - **Stack Overflow**: Tag questions with `transcripter`
 
 #### Professional Support
-- **Email**: support@transcripter.dev
+- **Email**: anasgaima18@gmail.com
 - **Enterprise Support**: Available for production deployments
 - **Custom Development**: Tailored solutions and integrations
 - **Training**: Team onboarding and technical training
@@ -1664,7 +1664,7 @@ Help improve the project by:
 ### Security Issues
 
 For security vulnerabilities:
-- **Email**: security@transcripter.dev
+- **Email**: anasgaima18@gmail.com
 - **PGP Key**: Available on request
 - **Response**: 24-48 hours for acknowledgment
 - **Disclosure**: Coordinated disclosure process
@@ -1675,7 +1675,7 @@ For security vulnerabilities:
 
 ### 🌟 Star this repository if it helped you!
 
-**Made with ❤️ by the Transcripter Team**
+**Made with ❤️ by Anas Gaima**
 
 [![GitHub Stars](https://img.shields.io/github/stars/username/transcripter?style=social)](https://github.com/username/transcripter)
 [![GitHub Forks](https://img.shields.io/github/forks/username/transcripter?style=social)](https://github.com/username/transcripter/fork)
