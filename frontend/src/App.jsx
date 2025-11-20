@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
 import PrivateRoute from './components/PrivateRoute';
 import ThemeToggle from './components/ThemeToggle';
+import Layout from './components/Layout';
 
 function App() {
   return (
@@ -15,21 +16,25 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route 
-          path="/record" 
+        <Route
+          path="/record"
           element={
             <PrivateRoute>
-              <Record />
+              <Layout>
+                <Record />
+              </Layout>
             </PrivateRoute>
-          } 
+          }
         />
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <Layout>
+                <Dashboard />
+              </Layout>
             </PrivateRoute>
-          } 
+          }
         />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

@@ -1,52 +1,5 @@
-import React, { useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
-const scaleIn = keyframes`
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-`;
-
-const Overlay = styled.div`
-  position: fixed; inset: 0; z-index: 9998;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
-  animation: ${fadeIn} 200ms ease-out;
-`;
-
-const ModalBox = styled.div`
-  background: #fff; border-radius: 1rem; box-shadow: 0 20px 60px rgba(2,6,23,0.2);
-  max-width: 42rem; width: 90%; max-height: 90vh; overflow: hidden;
-  animation: ${scaleIn} 220ms ease-out;
-`;
-
-const Header = styled.div`
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.25rem 2rem; border-bottom: 1px solid #e2e8f0;
-`;
-
-const Title = styled.h2`
-  font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0;
-`;
-
-const Close = styled.button`
-  color: #94a3b8; font-size: 1.25rem; padding: 0.25rem; border: 0; background: transparent; cursor: pointer;
-  transition: color 160ms ease; &:hover { color: #475569; }
-`;
-
-const Content = styled.div`
-  padding: 2rem; overflow-y: auto; max-height: calc(90vh - 140px);
-`;
-
-const Footer = styled.div`
-  display: flex; gap: 0.75rem; justify-content: flex-end;
-  padding: 1.25rem 2rem; border-top: 1px solid #e2e8f0;
-`;
+import { useEffect } from 'react';
+import GlassCard from './ui/GlassCard';
 
 const Modal = ({ isOpen, onClose, title, children, footer }) => {
   useEffect(() => {
@@ -74,16 +27,36 @@ const Modal = ({ isOpen, onClose, title, children, footer }) => {
   if (!isOpen) return null;
 
   return (
-    <Overlay onClick={onClose}>
-      <ModalBox onClick={(e) => e.stopPropagation()}>
-        <Header>
-          <Title>{title}</Title>
-          <Close onClick={onClose} aria-label="Close modal">×</Close>
-        </Header>
-        <Content>{children}</Content>
-        {footer && <Footer>{footer}</Footer>}
-      </ModalBox>
-    </Overlay>
+    <div
+      className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
+      <GlassCard
+        className="w-[90%] max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-0 animate-scale-in bg-background/95 border-white/10"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-8 py-5 border-b border-white/10">
+          <h2 className="text-xl font-bold text-foreground">{title}</h2>
+          <button
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground transition-colors text-2xl leading-none"
+            aria-label="Close modal"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="p-8 overflow-y-auto">
+          {children}
+        </div>
+
+        {footer && (
+          <div className="flex gap-3 justify-end px-8 py-5 border-t border-white/10 bg-white/5">
+            {footer}
+          </div>
+        )}
+      </GlassCard>
+    </div>
   );
 };
 

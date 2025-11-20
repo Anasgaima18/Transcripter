@@ -1,178 +1,124 @@
-// src/pages/Landing.jsx
-import { Link } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-import Navbar from "../components/Navbar";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import PremiumButton from '../components/ui/PremiumButton';
+import GlassCard from '../components/ui/GlassCard';
 
-// ==================== ANIMATIONS ====================
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const float = keyframes`
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-25px) rotate(2deg); }
-`;
-
-const pulse = keyframes`
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; }
-`;
-
-const gradientMove = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-`;
-
-// ==================== STYLED COMPONENTS ====================
-const PageWrap = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-  position: relative;
-  overflow-x: hidden;
-  color: white;
-`;
-
-const BackgroundOrbs = styled.div`
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-`;
-
-const Orb = styled.div`
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.4;
-  animation: ${float} 25s ease-in-out infinite;
-
-  &:nth-child(1) {
-    width: 600px; height: 600px;
-    top: -15%; left: -15%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-  }
-  &:nth-child(2) {
-    width: 500px; height: 500px;
-    top: 30%; right: -10%;
-    background: linear-gradient(135deg, #f093fb, #f5576c);
-    animation-delay: 5s;
-  }
-  &:nth-child(3) {
-    width: 450px; height: 450px;
-    bottom: -10%; left: 20%;
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
-    animation-delay: 10s;
-  }
-`;
-
-const Content = styled.div`
-  position: relative;
-  z-index: 1;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  animation: ${fadeIn} 0.6s ease-out;
-`;
-
-// ==================== HERO SECTION ====================
-const HeroTitle = styled.h1`
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 900;
-  background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #ec4899 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: ${gradientMove} 5s ease infinite;
-`;
-
-const HeroSubtitle = styled.p`
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.7;
-  max-width: 700px;
-  margin: 1rem auto 3rem auto;
-`;
-
-const CTAButtons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-`;
-
-const PrimaryButton = styled(Link)`
-  padding: 1rem 2.5rem;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
-  text-decoration: none;
-  transition: 0.3s ease;
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 50px rgba(102, 126, 234, 0.6);
-  }
-`;
-
-const SecondaryButton = styled(Link)`
-  padding: 1rem 2.5rem;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  text-decoration: none;
-  color: #fff;
-  font-weight: 600;
-  transition: 0.3s ease;
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-3px);
-  }
-`;
-
-const LanguageSupport = styled.div`
-  margin-top: 2rem;
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.9);
-  strong { color: #a78bfa; }
-`;
-
-// ==================== MAIN COMPONENT ====================
 const Landing = () => {
   return (
-    <PageWrap>
-      <Navbar />
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden relative selection:bg-primary/30">
+      {/* Background Effects */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-purple-500/20 blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-500/20 blur-[100px] animate-pulse delay-1000" />
+      </div>
 
-      <BackgroundOrbs>
-        <Orb />
-        <Orb />
-        <Orb />
-      </BackgroundOrbs>
+      {/* Navbar */}
+      <nav className="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30">
+              T
+            </div>
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+              Transcripter
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link to="/login">
+              <PremiumButton variant="ghost">Sign In</PremiumButton>
+            </Link>
+            <Link to="/signup">
+              <PremiumButton variant="primary">Get Started</PremiumButton>
+            </Link>
+          </div>
+        </div>
+      </nav>
 
-      <Content>
-        <HeroTitle>Transform Your Voice into Text, Instantly</HeroTitle>
-        <HeroSubtitle>
-          Experience the future of speech-to-text with <strong>Transcripter</strong>. 
-          Record in real-time, detect languages automatically, and save securely.
-        </HeroSubtitle>
+      {/* Hero Section */}
+      <section className="relative z-10 pt-32 pb-20 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/20 mb-8 animate-fade-in">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-sm font-medium text-muted-foreground">New: Real-time Transcription</span>
+          </div>
 
-        <CTAButtons>
-          <PrimaryButton to="/signup">🚀 Start Free Now</PrimaryButton>
-          <SecondaryButton to="/login">🔑 Sign In</SecondaryButton>
-        </CTAButtons>
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight animate-slide-in">
+            Transform Your Voice <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+              Into Text, Instantly
+            </span>
+          </h1>
 
-        <LanguageSupport>
-          <strong>13+ Languages Supported</strong> — Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali, Marathi, Gujarati, Punjabi, Odia, and English
-        </LanguageSupport>
-      </Content>
-    </PageWrap>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed animate-slide-in delay-100">
+            Experience the future of speech-to-text. Record in real-time, detect languages automatically,
+            and manage your transcriptions with a beautiful, intuitive interface.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-4 animate-slide-in delay-200">
+            <Link to="/signup">
+              <PremiumButton variant="gradient" className="text-lg px-8 py-4 h-auto">
+                Start Transcribing Free
+              </PremiumButton>
+            </Link>
+            <Link to="/login">
+              <PremiumButton variant="glass" className="text-lg px-8 py-4 h-auto">
+                View Demo
+              </PremiumButton>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <GlassCard hoverEffect className="text-center p-8">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-blue-500/10 flex items-center justify-center text-3xl">
+                🎙️
+              </div>
+              <h3 className="text-xl font-bold mb-3">Real-time Recording</h3>
+              <p className="text-muted-foreground">
+                Record directly in your browser with high-fidelity audio capture and instant feedback.
+              </p>
+            </GlassCard>
+
+            <GlassCard hoverEffect className="text-center p-8">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-purple-500/10 flex items-center justify-center text-3xl">
+                🌍
+              </div>
+              <h3 className="text-xl font-bold mb-3">Multi-language</h3>
+              <p className="text-muted-foreground">
+                Support for 13+ languages including Hindi, Tamil, Telugu, and more with high accuracy.
+              </p>
+            </GlassCard>
+
+            <GlassCard hoverEffect className="text-center p-8">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-pink-500/10 flex items-center justify-center text-3xl">
+                ⚡
+              </div>
+              <h3 className="text-xl font-bold mb-3">Instant Export</h3>
+              <p className="text-muted-foreground">
+                Download your transcripts in multiple formats or share them instantly with your team.
+              </p>
+            </GlassCard>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 py-12 px-6 border-t border-white/10 bg-black/20 backdrop-blur-lg">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🎧</span>
+            <span className="font-bold text-lg">Transcripter</span>
+          </div>
+          <div className="text-muted-foreground text-sm">
+            © 2025 Transcripter. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 

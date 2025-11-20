@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
-import { Card, Button, Input, Alert } from "../components/ui";
+import GlassCard from "../components/ui/GlassCard";
+import PremiumButton from "../components/ui/PremiumButton";
+import PremiumInput from "../components/ui/PremiumInput";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
-  
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
@@ -46,173 +47,97 @@ const Signup = () => {
     }
 
     const result = await signup(formData.username, formData.email, formData.password);
-    
+
     if (result.success) {
       navigate("/record");
     } else {
       setError(result.message);
     }
-    
+
     setLoading(false);
   };
 
-  // Styled Components
-  const PageWrap = styled.div`
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at top left, #eef2ff, #f5f3ff, #fce7f3);
-    overflow: hidden;
-    position: relative;
-
-    body.dark & {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    }
-  `;
-
-  const Glow = styled(motion.div)`
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(236, 72, 153, 0.15));
-    border-radius: 50%;
-    filter: blur(100px);
-    z-index: 0;
-  `;
-
-  const FormCard = styled(motion.div)`
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 28rem;
-    padding: 1rem;
-  `;
-
-  const CardInner = styled(Card)`
-    padding: 2rem;
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.9);
-
-    body.dark & {
-      background: rgba(31, 41, 55, 0.9);
-      border-color: rgba(75, 85, 99, 0.3);
-    }
-  `;
-
-  const Title = styled.h1`
-    text-align: center;
-    font-size: 1.75rem;
-    font-weight: 800;
-    background: linear-gradient(90deg, #7c3aed, #4f46e5, #3b82f6);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 0.5rem;
-  `;
-
-  const Subtitle = styled.p`
-    text-align: center;
-    color: #64748b;
-    margin-bottom: 1.5rem;
-
-    body.dark & {
-      color: #9ca3af;
-    }
-  `;
-
-  const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  `;
-
-  const LoginText = styled.p`
-    text-align: center;
-    font-size: 0.875rem;
-    color: #64748b;
-    margin-top: 1.5rem;
-
-    body.dark & {
-      color: #9ca3af;
-    }
-  `;
-
-  const LoginLink = styled(Link)`
-    color: #4f46e5;
-    text-decoration: none;
-    font-weight: 600;
-    &:hover {
-      text-decoration: underline;
-    }
-  `;
-
   return (
-    <PageWrap>
-      <Glow
-        animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 0] }}
-        transition={{ duration: 15, repeat: Infinity }}
-        style={{ top: "-150px", right: "-150px" }}
-      />
+    <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden selection:bg-primary/30">
+      {/* Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-pink-500/20 blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-500/20 blur-[100px] animate-pulse delay-1000" />
+      </div>
 
-      <FormCard
-        initial={{ opacity: 0, y: 50 }}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md p-4 relative z-10"
       >
-        <CardInner>
-          <Title>🎤 Join Transcripter</Title>
-          <Subtitle>Create your account to start transcribing.</Subtitle>
+        <GlassCard className="p-8 border-white/10">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-indigo-600 mb-2">
+              Create Account
+            </h1>
+            <p className="text-muted-foreground">Join Transcripter today</p>
+          </div>
 
-          {error && <Alert variant="danger" style={{ marginBottom: "1rem" }}>{error}</Alert>}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl mb-6 text-sm">
+              {error}
+            </div>
+          )}
 
-          <Form onSubmit={handleSubmit}>
-            <Input
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <PremiumInput
+              label="Username"
               type="text"
               name="username"
-              placeholder="Username"
+              placeholder="Choose a username"
               value={formData.username}
               onChange={handleChange}
-              required
             />
-            <Input
+            <PremiumInput
+              label="Email Address"
               type="email"
               name="email"
-              placeholder="Email address"
+              placeholder="name@example.com"
               value={formData.email}
               onChange={handleChange}
-              required
             />
-            <Input
+            <PremiumInput
+              label="Password"
               type="password"
               name="password"
-              placeholder="Password (min 6 characters)"
+              placeholder="Min 6 characters"
               value={formData.password}
               onChange={handleChange}
-              required
             />
-            <Input
+            <PremiumInput
+              label="Confirm Password"
               type="password"
               name="confirmPassword"
-              placeholder="Confirm password"
+              placeholder="Re-enter password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              required
             />
 
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button type="submit" style={{ width: "100%" }} disabled={loading}>
-                {loading ? "⏳ Creating Account..." : "🚀 Sign Up"}
-              </Button>
-            </motion.div>
-          </Form>
+            <PremiumButton
+              type="submit"
+              variant="gradient"
+              className="w-full py-4 text-lg shadow-lg shadow-pink-500/25 from-pink-500 to-indigo-600"
+              disabled={loading}
+            >
+              {loading ? "Creating Account..." : "Sign Up Free"}
+            </PremiumButton>
+          </form>
 
-          <LoginText>
-            Already have an account? <LoginLink to="/login">Sign in</LoginLink>
-          </LoginText>
-        </CardInner>
-      </FormCard>
-    </PageWrap>
+          <div className="mt-8 text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link to="/login" className="text-primary hover:text-primary/80 font-medium transition-colors">
+              Sign in
+            </Link>
+          </div>
+        </GlassCard>
+      </motion.div>
+    </div>
   );
 };
 

@@ -1,33 +1,27 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-
-const Wrap = styled.div`
-  position: relative; display: inline-block;
-  &:hover > span { opacity: 1; visibility: visible; }
-`;
-
-const Bubble = styled.span`
-  position: absolute; left: 50%; transform: translateX(-50%);
-  background: #0f172a; color: #fff; font-size: 0.875rem; padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem; white-space: nowrap; opacity: 0; visibility: hidden;
-  transition: opacity 160ms ease;
-  z-index: 1000; pointer-events: none;
-  ${(p) => p.$pos === 'top' ? css`bottom: 100%; margin-bottom: 0.5rem;` : css`top: 100%; margin-top: 0.5rem;`}
-
-  &::after {
-    content: '';
-    position: absolute; left: 50%; transform: translateX(-50%);
-    border: 6px solid transparent;
-    ${(p) => p.$pos === 'top' ? css`top: 100%; border-top-color: #0f172a;` : css`bottom: 100%; border-bottom-color: #0f172a;`}
-  }
-`;
 
 const Tooltip = ({ children, text, position = 'top' }) => {
   return (
-    <Wrap>
+    <div className="group relative inline-block">
       {children}
-      <Bubble $pos={position}>{text}</Bubble>
-    </Wrap>
+      <span
+        className={`
+          absolute left-1/2 -translate-x-1/2 px-3 py-2
+          bg-slate-900 text-white text-sm rounded-lg whitespace-nowrap
+          opacity-0 invisible group-hover:opacity-100 group-hover:visible
+          transition-all duration-200 ease-out z-50 pointer-events-none
+          ${position === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'}
+          
+          after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:border-[6px] after:border-transparent
+          ${position === 'top'
+            ? 'after:top-full after:border-t-slate-900'
+            : 'after:bottom-full after:border-b-slate-900'
+          }
+        `}
+      >
+        {text}
+      </span>
+    </div>
   );
 };
 

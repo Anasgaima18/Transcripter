@@ -1,47 +1,17 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import styled, { keyframes } from 'styled-components';
-
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
-const LoadingWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #eef2ff, #f5f3ff, #fce7f3);
-  gap: 1rem;
-`;
-
-const Spinner = styled.div`
-  width: 48px;
-  height: 48px;
-  border: 4px solid #e0e7ff;
-  border-top-color: #4f46e5;
-  border-radius: 50%;
-  animation: ${spin} 0.8s linear infinite;
-`;
-
-const LoadingText = styled.div`
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #4f46e5;
-  letter-spacing: -0.01em;
-`;
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <LoadingWrap>
-        <Spinner />
-        <LoadingText>Loading...</LoadingText>
-      </LoadingWrap>
+      <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-900 dark:to-slate-800 gap-4">
+        <div className="w-12 h-12 border-4 border-indigo-100 dark:border-slate-700 border-t-indigo-600 dark:border-t-indigo-500 rounded-full animate-spin" />
+        <div className="text-lg font-semibold text-indigo-600 dark:text-indigo-400 tracking-tight">
+          Loading...
+        </div>
+      </div>
     );
   }
 

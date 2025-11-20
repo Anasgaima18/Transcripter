@@ -1,68 +1,49 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
 
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-`;
-
-const Line = styled.div`
-  height: 1rem; background: #e2e8f0; border-radius: 0.5rem; margin-bottom: 0.5rem;
-  animation: ${pulse} 1.4s ease-in-out infinite;
-`;
-
-const Box = styled.div`
-  background: #e2e8f0; border-radius: 0.75rem; animation: ${pulse} 1.4s ease-in-out infinite;
-`;
-
-const Circle = styled.div`
-  background: #e2e8f0; border-radius: 9999px; animation: ${pulse} 1.4s ease-in-out infinite;
-`;
-
-const Panel = styled.div`
-  background: #fff; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e2e8f0; margin-bottom: 1rem;
-`;
+const Pulse = ({ className = "", ...props }) => (
+  <div className={`animate-pulse bg-slate-200 dark:bg-slate-700 ${className}`} {...props} />
+);
 
 export const SkeletonText = ({ lines = 3, width = '100%' }) => (
   <div style={{ width }}>
     {Array.from({ length: lines }).map((_, index) => (
-      <Line key={index} />
+      <Pulse key={index} className="h-4 rounded-lg mb-2 last:mb-0" />
     ))}
   </div>
 );
 
 export const SkeletonTitle = ({ width = '60%' }) => (
-  <Box style={{ height: '2rem', width, marginBottom: '1rem' }} />
+  <Pulse className="h-8 rounded-xl mb-4" style={{ width }} />
 );
 
 export const SkeletonAvatar = ({ size = 48 }) => (
-  <Circle style={{ width: size, height: size }} />
+  <Pulse className="rounded-full" style={{ width: size, height: size }} />
 );
 
 export const SkeletonCard = ({ height = 200 }) => (
-  <Box style={{ height }} />
+  <Pulse className="rounded-2xl" style={{ height }} />
 );
 
 export const TranscriptionCardSkeleton = () => (
-  <Panel>
-    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-      <Box style={{ height: '1rem', width: '8rem' }} />
-      <Box style={{ height: '1rem', width: '5rem' }} />
+  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 mb-4">
+    <div className="flex justify-between mb-4">
+      <Pulse className="h-4 w-32 rounded" />
+      <Pulse className="h-4 w-20 rounded" />
     </div>
     <SkeletonText lines={2} />
-    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-      <Box style={{ height: '1rem', width: '6rem' }} />
-      <Box style={{ height: '1rem', width: '6rem' }} />
+    <div className="flex gap-4 mt-4">
+      <Pulse className="h-4 w-24 rounded" />
+      <Pulse className="h-4 w-24 rounded" />
     </div>
-  </Panel>
+  </div>
 );
 
 export const DashboardSkeleton = () => (
   <div>
-    <div style={{ marginBottom: '2rem' }}>
+    <div className="mb-8">
       <SkeletonTitle width="30%" />
     </div>
-    <div style={{ display: 'grid', gap: '1rem' }}>
+    <div className="grid gap-4">
       {Array.from({ length: 5 }).map((_, index) => (
         <TranscriptionCardSkeleton key={index} />
       ))}
@@ -70,6 +51,13 @@ export const DashboardSkeleton = () => (
   </div>
 );
 
-const Skeleton = { Text: SkeletonText, Title: SkeletonTitle, Avatar: SkeletonAvatar, Card: SkeletonCard, TranscriptionCard: TranscriptionCardSkeleton, Dashboard: DashboardSkeleton };
+const Skeleton = {
+  Text: SkeletonText,
+  Title: SkeletonTitle,
+  Avatar: SkeletonAvatar,
+  Card: SkeletonCard,
+  TranscriptionCard: TranscriptionCardSkeleton,
+  Dashboard: DashboardSkeleton
+};
 
 export default Skeleton;

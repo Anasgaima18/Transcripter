@@ -1,31 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-
-const Wrap = styled.div`
-  width: 100%; display: flex; align-items: center; justify-content: center; padding: 1.5rem 0;
-`;
-
-const Bars = styled.div`
-  height: 6rem; width: 100%; max-width: 48rem; display: flex; align-items: flex-end; gap: 0.25rem;
-`;
-
-const Bar = styled.div`
-  flex: 1; border-radius: 9999px; background: linear-gradient(to bottom, #818cf8, #60a5fa);
-  transition: height 180ms ease;
-`;
+import { useEffect, useRef, useState } from 'react';
 
 const Waveform = ({ isRecording, audioLevel = 0.5 }) => {
-  const [bars, setBars] = useState([]);
-  const animationRef = useRef(null);
-
-  useEffect(() => {
-    const initialBars = Array.from({ length: 40 }, (_, i) => ({
+  const [bars, setBars] = useState(() =>
+    Array.from({ length: 40 }, (_, i) => ({
       id: i,
       height: Math.random() * 30 + 20,
-      delay: i * 0.05,
-    }));
-    setBars(initialBars);
-  }, []);
+      delay: i * 0.05
+    }))
+  );
+  const animationRef = useRef(null);
 
   useEffect(() => {
     if (isRecording) {
@@ -60,13 +43,20 @@ const Waveform = ({ isRecording, audioLevel = 0.5 }) => {
   }, [isRecording, audioLevel]);
 
   return (
-    <Wrap>
-      <Bars>
+    <div className="w-full flex items-center justify-center py-8">
+      <div className="h-24 w-full max-w-3xl flex items-end gap-1 px-4">
         {bars.map((bar) => (
-          <Bar key={bar.id} style={{ height: `${bar.height}%`, transitionDelay: `${bar.delay}s` }} />
+          <div
+            key={bar.id}
+            className="flex-1 rounded-full bg-gradient-to-t from-indigo-500 to-purple-500 transition-[height] duration-100 ease-linear opacity-80 hover:opacity-100"
+            style={{
+              height: `${bar.height}%`,
+              minHeight: '10%'
+            }}
+          />
         ))}
-      </Bars>
-    </Wrap>
+      </div>
+    </div>
   );
 };
 

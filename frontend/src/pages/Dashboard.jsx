@@ -1,246 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import Navbar from "../components/Navbar";
 import api from "../utils/api";
 import { useToast } from "../components/ToastProvider";
 import Modal from "../components/Modal";
 import Skeleton from "../components/Skeleton";
 import { StatsGrid } from "../components/StatsCard";
-import { Container, Card, Button, Alert } from "../components/ui";
-
-const PageWrap = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-`;
-
-const HeaderRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-`;
-
-const Title = styled.h1`
-  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #0f172a;
-  margin: 0;
-`;
-
-const Sub = styled.p`
-  color: #475569;
-  margin: 0.25rem 0 0;
-`;
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 1fr 2fr;
-  }
-
-  @media (max-width: 640px) {
-    gap: 0.75rem;
-  }
-`;
-
-const ListHeader = styled.div`
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid #e2e8f0;
-
-  @media (max-width: 640px) {
-    padding: 0.75rem 1rem;
-  }
-`;
-
-const ListBody = styled.div`
-  max-height: 560px;
-  overflow-y: auto;
-  
-  & > * + * {
-    border-top: 1px solid #e2e8f0;
-  }
-
-  /* Custom scrollbar */
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f5f9;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-  }
-
-  @media (max-width: 640px) {
-    max-height: 400px;
-  }
-`;
-
-const ListItem = styled.button`
-  width: 100%;
-  text-align: left;
-  padding: 1rem 1.25rem;
-  background: ${(p) => (p.$active ? "#f8fafc" : "transparent")};
-  transition: all 0.2s ease;
-  border: none;
-  outline: none;
-  cursor: pointer;
-
-  &:hover {
-    background: #f8fafc;
-    transform: translateX(2px);
-  }
-
-  &:active {
-    transform: translateX(0);
-  }
-
-  @media (max-width: 640px) {
-    padding: 0.75rem 1rem;
-  }
-`;
-
-const ItemMeta = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  color: #64748b;
-  gap: 0.5rem;
-
-  @media (max-width: 640px) {
-    font-size: 0.75rem;
-    flex-wrap: wrap;
-  }
-`;
-
-const ItemText = styled.div`
-  margin-top: 0.25rem;
-  color: #0f172a;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: 1.5;
-
-  @media (max-width: 640px) {
-    font-size: 0.875rem;
-    -webkit-line-clamp: 3;
-  }
-`;
-
-const ItemFooter = styled.div`
-  margin-top: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.75rem;
-  color: #64748b;
-
-  @media (max-width: 640px) {
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-`;
-
-const EmptyCard = styled.div`
-  padding: 3rem;
-  text-align: center;
-`;
-
-const Emoji = styled.div`
-  font-size: 2rem;
-  animation: bounce 1.5s infinite;
-
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-  }
-`;
-
-const DetailHeader = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-  }
-`;
-
-const DetailTitle = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-  color: #0f172a;
-
-  @media (max-width: 640px) {
-    font-size: 1.125rem;
-  }
-`;
-
-const DetailMeta = styled.div`
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  color: #475569;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-
-  @media (max-width: 640px) {
-    font-size: 0.75rem;
-    gap: 0.5rem;
-  }
-`;
-
-const CloseButton = styled.button`
-  color: #94a3b8;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  transition: all 0.2s ease;
-  border-radius: 0.25rem;
-
-  &:hover {
-    color: #475569;
-    background: #f1f5f9;
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-`;
-
-const DetailActions = styled.div`
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-content: flex-end;
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-    align-items: stretch;
-    
-    button {
-      width: 100%;
-    }
-  }
-`;
+import GlassCard from "../components/ui/GlassCard";
+import PremiumButton from "../components/ui/PremiumButton";
 
 const Dashboard = () => {
   const [transcriptions, setTranscriptions] = useState([]);
@@ -253,11 +19,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { success, error: showError, info } = useToast();
 
-  useEffect(() => {
-    fetchTranscriptions();
-  }, []);
-
-  const fetchTranscriptions = async () => {
+  const fetchTranscriptions = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await api.get("/api/transcriptions");
@@ -270,7 +32,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [info, showError]);
+
+  useEffect(() => {
+    fetchTranscriptions();
+  }, [fetchTranscriptions]);
 
   const openDeleteModal = (transcription) => {
     setTranscriptionToDelete(transcription);
@@ -312,7 +78,7 @@ ${t.transcription}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      setTimeout(() => window.URL.revokeObjectURL(url), 100);
       success("Transcription downloaded successfully!");
     } catch (error) {
       showError("Failed to download transcription. Please try again.");
@@ -358,12 +124,9 @@ ${t.transcription}`;
 
   if (loading)
     return (
-      <PageWrap>
-        <Navbar />
-        <Container style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
-          <Skeleton.Dashboard />
-        </Container>
-      </PageWrap>
+      <div className="space-y-6">
+        <Skeleton.Dashboard />
+      </div>
     );
 
   const totalTranscriptions = transcriptions.length;
@@ -379,127 +142,174 @@ ${t.transcription}`;
   ];
 
   return (
-    <PageWrap>
-      <Navbar />
-      <Container style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
-        <HeaderRow>
-          <div>
-            <Title>🎙️ My Transcriptions</Title>
-            <Sub>Review and manage your recent audio transcriptions</Sub>
-          </div>
-          <Button onClick={() => navigate("/record")}>➕ New Recording</Button>
-        </HeaderRow>
+    <div className="space-y-8 pb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">My Transcriptions</h1>
+          <p className="text-muted-foreground mt-1">Review and manage your recent audio transcriptions</p>
+        </div>
+        <PremiumButton onClick={() => navigate("/record")} variant="gradient" className="shadow-lg shadow-indigo-500/25">
+          <span className="mr-2">➕</span> New Recording
+        </PremiumButton>
+      </div>
 
-        {error && <Alert variant="danger">{error}</Alert>}
-        {transcriptions.length > 0 && <StatsGrid stats={stats} />}
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl">
+          {error}
+        </div>
+      )}
 
-        {transcriptions.length === 0 ? (
-          <EmptyCard as={Card}>
-            <Emoji>🎤</Emoji>
-            <h2 style={{ fontWeight: 600, color: "#0f172a", marginTop: "0.5rem" }}>No transcriptions yet</h2>
-            <p style={{ color: "#475569" }}>Start recording to create your first transcription!</p>
-            <div style={{ marginTop: "1rem" }}>
-              <Button onClick={() => navigate("/record")}>Start Recording</Button>
+      {transcriptions.length > 0 && <StatsGrid stats={stats} />}
+
+      {transcriptions.length === 0 ? (
+        <GlassCard className="p-12 text-center border-dashed border-2 border-white/20 bg-white/5">
+          <div className="text-4xl mb-4 animate-bounce">🎤</div>
+          <h2 className="text-xl font-semibold text-foreground mb-2">No transcriptions yet</h2>
+          <p className="text-muted-foreground mb-6">Start recording to create your first transcription!</p>
+          <PremiumButton onClick={() => navigate("/record")} variant="primary">
+            Start Recording
+          </PremiumButton>
+        </GlassCard>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+          {/* List View */}
+          <GlassCard className="lg:col-span-1 overflow-hidden flex flex-col h-full p-0">
+            <div className="p-4 border-b border-white/10 bg-white/5">
+              <h2 className="font-semibold text-foreground">All Transcriptions ({transcriptions.length})</h2>
             </div>
-          </EmptyCard>
-        ) : (
-          <Grid>
-            <Card style={{ padding: 0 }}>
-              <ListHeader>
-                <h2 style={{ margin: 0, fontWeight: 600 }}>
-                  All Transcriptions ({transcriptions.length})
-                </h2>
-              </ListHeader>
-              <ListBody>
-                {transcriptions.map((t) => (
-                  <ListItem
-                    key={t._id}
-                    $active={selectedTranscription?._id === t._id}
-                    onClick={() => setSelectedTranscription(t)}
-                  >
-                    <ItemMeta>
-                      <span>{formatDate(t.createdAt)}</span>
-                      <span>{getLanguageName(t.detectedLanguage)}</span>
-                    </ItemMeta>
-                    <ItemText>{t.transcription}</ItemText>
-                    <ItemFooter>
-                      <span>⏱️ {formatDuration(t.duration)}</span>
-                      <span>📝 {t.wordCount} words</span>
-                    </ItemFooter>
-                  </ListItem>
-                ))}
-              </ListBody>
-            </Card>
-
-            {selectedTranscription && (
-              <Card style={{ padding: "1.5rem" }}>
-                <DetailHeader>
-                  <div>
-                    <DetailTitle>Transcription Details</DetailTitle>
-                    <DetailMeta>
-                      <span>Date: {formatDate(selectedTranscription.createdAt)}</span>
-                      <span>Language: {getLanguageName(selectedTranscription.detectedLanguage)}</span>
-                      <span>Duration: {formatDuration(selectedTranscription.duration)}</span>
-                      <span>Words: {selectedTranscription.wordCount}</span>
-                    </DetailMeta>
+            <div className="overflow-y-auto flex-1 p-2 space-y-1 custom-scrollbar">
+              {transcriptions.map((t) => (
+                <button
+                  key={t._id}
+                  onClick={() => setSelectedTranscription(t)}
+                  className={`
+                    w-full text-left p-4 rounded-xl transition-all duration-200
+                    ${selectedTranscription?._id === t._id
+                      ? 'bg-primary/10 border border-primary/20 shadow-sm'
+                      : 'hover:bg-white/5 border border-transparent'
+                    }
+                  `}
+                >
+                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                    <span>{formatDate(t.createdAt)}</span>
+                    <span className="px-2 py-0.5 rounded-full bg-white/10 text-foreground/80">
+                      {getLanguageName(t.detectedLanguage)}
+                    </span>
                   </div>
-                  <CloseButton onClick={() => setSelectedTranscription(null)}>✕</CloseButton>
-                </DetailHeader>
+                  <p className="text-sm font-medium text-foreground line-clamp-2 mb-2">
+                    {t.transcription}
+                  </p>
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground/80">
+                    <span>⏱️ {formatDuration(t.duration)}</span>
+                    <span>📝 {t.wordCount} words</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </GlassCard>
 
-                <div style={{ marginTop: "1rem" }}>
-                  <h3 style={{ color: "#0f172a", fontWeight: 500, marginBottom: "0.5rem" }}>Full Transcription</h3>
-                  <Card style={{ padding: "1rem", background: "#f8fafc" }}>
-                    <p style={{ lineHeight: 1.7, color: "#1f2937", whiteSpace: "pre-wrap", margin: 0 }}>
-                      {selectedTranscription.transcription}
-                    </p>
-                  </Card>
+          {/* Detail View */}
+          <div className="lg:col-span-2 h-full">
+            {selectedTranscription ? (
+              <GlassCard className="h-full flex flex-col p-0 overflow-hidden animate-fade-in">
+                <div className="p-6 border-b border-white/10 flex items-start justify-between gap-4 bg-white/5">
+                  <div>
+                    <h2 className="text-xl font-bold text-foreground">Transcription Details</h2>
+                    <div className="flex flex-wrap gap-3 mt-2 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        📅 {formatDate(selectedTranscription.createdAt)}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        🌍 {getLanguageName(selectedTranscription.detectedLanguage)}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        ⏱️ {formatDuration(selectedTranscription.duration)}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        📝 {selectedTranscription.wordCount} words
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setSelectedTranscription(null)}
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    ✕
+                  </button>
                 </div>
 
-                <DetailActions>
-                  <Button variant="secondary" onClick={() => downloadTranscription(selectedTranscription)}>
-                    📥 Download
-                  </Button>
-                  <Button variant="danger" onClick={() => openDeleteModal(selectedTranscription)}>
-                    🗑️ Delete
-                  </Button>
-                </DetailActions>
-              </Card>
-            )}
-          </Grid>
-        )}
+                <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10 shadow-inner">
+                    <p className="text-foreground/90 leading-relaxed whitespace-pre-wrap text-lg">
+                      {selectedTranscription.transcription}
+                    </p>
+                  </div>
+                </div>
 
-        <Modal
-          isOpen={deleteModalOpen}
-          onClose={() => {
-            setDeleteModalOpen(false);
-            setTranscriptionToDelete(null);
-          }}
-          title="Delete Transcription"
-          footer={
-            <>
-              <Button variant="secondary" onClick={() => setDeleteModalOpen(false)}>
-                Cancel
-              </Button>
-              <Button variant="danger" onClick={confirmDelete}>
-                Delete
-              </Button>
-            </>
-          }
-        >
-          <p>Are you sure you want to delete this transcription?</p>
-          {transcriptionToDelete && (
-            <Card style={{ padding: "0.75rem", marginTop: "0.75rem" }}>
-              <p style={{ fontSize: "0.875rem", color: "#475569", margin: 0 }}>
-                <strong>Preview:</strong> {transcriptionToDelete.transcription.substring(0, 100)}...
-              </p>
-            </Card>
-          )}
-          <p style={{ fontSize: "0.875rem", color: "#475569", marginTop: "0.75rem" }}>
-            This action cannot be undone.
-          </p>
-        </Modal>
-      </Container>
-    </PageWrap>
+                <div className="p-6 border-t border-white/10 bg-white/5 flex flex-col sm:flex-row justify-end gap-3">
+                  <PremiumButton
+                    variant="secondary"
+                    onClick={() => downloadTranscription(selectedTranscription)}
+                    className="w-full sm:w-auto"
+                  >
+                    📥 Download
+                  </PremiumButton>
+                  <PremiumButton
+                    variant="ghost"
+                    className="text-red-500 hover:bg-red-500/10 hover:text-red-600 w-full sm:w-auto"
+                    onClick={() => openDeleteModal(selectedTranscription)}
+                  >
+                    🗑️ Delete
+                  </PremiumButton>
+                </div>
+              </GlassCard>
+            ) : (
+              <div className="h-full flex items-center justify-center text-muted-foreground bg-white/5 rounded-3xl border border-white/10 border-dashed">
+                <div className="text-center">
+                  <div className="text-4xl mb-4 opacity-50">👈</div>
+                  <p>Select a transcription to view details</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <Modal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setTranscriptionToDelete(null);
+        }}
+        title="Delete Transcription"
+        footer={
+          <>
+            <PremiumButton variant="ghost" onClick={() => setDeleteModalOpen(false)}>
+              Cancel
+            </PremiumButton>
+            <PremiumButton
+              variant="primary"
+              className="bg-red-500 hover:bg-red-600 text-white shadow-red-500/25"
+              onClick={confirmDelete}
+            >
+              Delete
+            </PremiumButton>
+          </>
+        }
+      >
+        <p className="text-foreground mb-4">Are you sure you want to delete this transcription?</p>
+        {transcriptionToDelete && (
+          <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-4 mb-4">
+            <p className="text-sm text-muted-foreground line-clamp-3 italic">
+              "{transcriptionToDelete.transcription}"
+            </p>
+          </div>
+        )}
+        <p className="text-sm text-red-500 font-medium">
+          This action cannot be undone.
+        </p>
+      </Modal>
+    </div>
   );
 };
 
