@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../components/ToastProvider';
 import Waveform from '../components/Waveform';
 import api from '../utils/api';
-import RecordButton from '../components/ui/RecordButton';
-import Timer from '../components/ui/Timer';
-import GlassCard from '../components/ui/GlassCard';
+import PremiumCard from '../components/ui/PremiumCard';
 import PremiumButton from '../components/ui/PremiumButton';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 
@@ -110,10 +108,10 @@ const RecordSarvam = () => {
   return (
     <div className="max-w-4xl mx-auto py-8 space-y-8">
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 inline-flex items-center gap-2">
+        <h1 className="text-5xl font-bold text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.5)] inline-flex items-center gap-3">
           <span>🎙️</span> Transcripter
         </h1>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
           Real-time speech-to-text for 11+ Indian languages
         </p>
       </div>
@@ -125,30 +123,30 @@ const RecordSarvam = () => {
         </div>
       )}
       {successMsg && (
-        <div className="bg-green-500/10 border border-green-500/20 text-green-500 px-4 py-3 rounded-xl text-center">
+        <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 text-[#00F0FF] px-4 py-3 rounded-xl text-center">
           {successMsg}
         </div>
       )}
 
-      <GlassCard className="p-8 space-y-8">
+      <PremiumCard className="p-8 space-y-8 border-white/5 bg-[#0A0A23]/50 backdrop-blur-3xl">
         {/* Language Selection */}
         {!isRecording && (
           <div className="space-y-3">
-            <label className="block text-sm font-medium text-muted-foreground ml-1">
+            <label className="block text-sm font-medium text-gray-300 ml-1">
               🌐 Select Language
             </label>
             <select
               value={selectedLanguage}
               onChange={handleLanguageChange}
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all appearance-none cursor-pointer hover:bg-white/10"
+              className="w-full px-4 py-3 rounded-xl bg-[#050511] border border-white/10 text-white focus:outline-none focus:border-[#00F0FF] focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all appearance-none cursor-pointer hover:border-white/20"
             >
               {SARVAM_LANGUAGES.map(lang => (
-                <option key={lang.code} value={lang.code} className="bg-background text-foreground">
+                <option key={lang.code} value={lang.code} className="bg-[#050511] text-white">
                   {lang.emoji} {lang.name}
                 </option>
               ))}
             </select>
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-xs text-gray-500 text-center">
               Tip: Use Auto-Detect to let Transcripter pick the language automatically.
             </p>
           </div>
@@ -156,7 +154,7 @@ const RecordSarvam = () => {
 
         {/* Status Indicator */}
         {(selectedLangInfo || detectedLanguage || (isRecording && selectedLanguage === 'auto')) && (
-          <div className="flex items-center gap-4 p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10">
+          <div className="flex items-center gap-4 p-4 rounded-2xl bg-[#00F0FF]/5 border border-[#00F0FF]/10">
             <span className="text-2xl">
               {selectedLanguage === 'auto' && !detectedLanguage && isRecording
                 ? '🔍'
@@ -165,14 +163,14 @@ const RecordSarvam = () => {
                   : selectedLangInfo?.emoji}
             </span>
             <div className="flex-1">
-              <div className="font-semibold text-foreground">
+              <div className="font-semibold text-white">
                 {selectedLanguage === 'auto' && !detectedLanguage && isRecording
                   ? 'Analyzing language...'
                   : detectedLanguage && selectedLanguage === 'auto'
                     ? (detectedLanguageName || 'Detected!')
                     : selectedLangInfo?.name}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-gray-400">
                 {selectedLanguage === 'auto' && !detectedLanguage && isRecording
                   ? 'Listening to detect your language'
                   : detectedLanguage && selectedLanguage === 'auto'
@@ -187,15 +185,15 @@ const RecordSarvam = () => {
         <div className={`
           relative rounded-3xl p-6 transition-all duration-500
           ${isRecording
-            ? 'bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 shadow-lg shadow-indigo-500/10'
-            : 'bg-white/5 border border-white/10'
+            ? 'bg-[#050511] border border-[#00F0FF]/30 shadow-[0_0_30px_rgba(0,240,255,0.1)]'
+            : 'bg-[#050511]/50 border border-white/5'
           }
         `}>
           <Waveform isRecording={isRecording} audioLevel={audioLevel} />
 
           {isRecording && (
             <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-              <div className="px-4 py-1 rounded-full bg-red-500/10 text-red-500 text-sm font-mono font-medium border border-red-500/20 animate-pulse">
+              <div className="px-4 py-1 rounded-full bg-red-500/10 text-red-500 text-sm font-mono font-medium border border-red-500/20 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.2)]">
                 {Math.floor(duration / 60)}:{String(duration % 60).padStart(2, '0')}
               </div>
             </div>
@@ -205,45 +203,38 @@ const RecordSarvam = () => {
         {/* Controls */}
         <div className="flex flex-col items-center gap-4">
           {!isRecording ? (
-            <button
+            <PremiumButton
               onClick={handleStartRecording}
               disabled={isConnecting}
-              className="
-                group relative px-8 py-4 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg
-                shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 active:scale-95
-                transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed
-              "
+              variant="primary"
+              className="px-12 py-4 text-lg rounded-full shadow-[0_0_30px_rgba(0,240,255,0.3)]"
             >
               <span className="flex items-center gap-3">
                 {isConnecting ? '⏳ Connecting...' : '🎙️ Start Recording'}
               </span>
-              <div className="absolute inset-0 rounded-full bg-white/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </button>
+            </PremiumButton>
           ) : (
-            <button
+            <PremiumButton
               onClick={handleStopRecording}
-              className="
-                group relative px-8 py-4 rounded-full bg-red-500 text-white font-bold text-lg
-                shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-105 active:scale-95
-                transition-all duration-300
-              "
+              variant="ghost"
+              className="px-12 py-4 text-lg rounded-full bg-red-500 text-white hover:bg-red-600 shadow-[0_0_30px_rgba(239,68,68,0.3)]"
             >
               <span className="flex items-center gap-3">
                 ⏹️ Stop Recording
               </span>
-            </button>
+            </PremiumButton>
           )}
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-gray-500">
             {isRecording ? 'Click to stop when you are done speaking.' : 'Ensure your mic has permission and speak clearly.'}
           </p>
         </div>
-      </GlassCard>
+      </PremiumCard>
 
       {/* Transcription Result */}
       {(transcript || interimTranscript) && (
-        <GlassCard className="p-6 space-y-4 animate-slide-in">
+        <PremiumCard className="p-6 space-y-4 animate-slide-in border-white/5 bg-[#0A0A23]/50">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
               📝 Transcription
             </h3>
             <div className="flex items-center gap-2">
@@ -252,7 +243,7 @@ const RecordSarvam = () => {
                   <PremiumButton variant="secondary" onClick={saveTranscription} className="text-sm py-2">
                     💾 Save
                   </PremiumButton>
-                  <PremiumButton variant="ghost" onClick={handleClear} className="text-sm py-2 text-red-500 hover:bg-red-500/10">
+                  <PremiumButton variant="ghost" onClick={handleClear} className="text-sm py-2 text-red-500 hover:bg-red-500/10 hover:text-red-400">
                     🗑️ Clear
                   </PremiumButton>
                 </>
@@ -260,20 +251,20 @@ const RecordSarvam = () => {
             </div>
           </div>
 
-          <div className="bg-white/5 rounded-xl p-6 border border-white/10 min-h-[150px]">
-            <p className="text-foreground/90 leading-relaxed whitespace-pre-wrap text-lg">
+          <div className="bg-[#050511]/50 rounded-xl p-6 border border-white/5 min-h-[150px] shadow-inner">
+            <p className="text-gray-200 leading-relaxed whitespace-pre-wrap text-lg font-light">
               {transcript}
               {interimTranscript && (
-                <span className="text-muted-foreground italic ml-1">{interimTranscript}</span>
+                <span className="text-gray-500 italic ml-1">{interimTranscript}</span>
               )}
             </p>
           </div>
 
-          <div className="flex items-center justify-between text-sm text-muted-foreground px-2">
+          <div className="flex items-center justify-between text-sm text-gray-500 px-2">
             <span>📊 Words: {transcript.split(/\s+/).filter(w => w).length}</span>
             <span>⏱️ Duration: {Math.floor(duration / 60)}:{String(duration % 60).padStart(2, '0')}</span>
           </div>
-        </GlassCard>
+        </PremiumCard>
       )}
     </div>
   );

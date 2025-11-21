@@ -1,37 +1,42 @@
 import React from 'react';
-import GlassCard from './ui/GlassCard';
+import { motion } from "framer-motion";
+import PremiumCard from "./ui/PremiumCard";
 
-export const StatsCard = ({ title, value, subtitle, icon, trend }) => {
+export const StatsCard = ({ title, value, icon, subtitle, delay = 0 }) => {
   return (
-    <GlassCard className="p-6 relative overflow-hidden group hover:border-primary/30 transition-colors">
-      <div className="flex justify-between items-start mb-4">
-        <div className="p-3 rounded-xl bg-primary/10 text-primary text-2xl group-hover:scale-110 transition-transform duration-300">
-          {icon}
+    <PremiumCard className="relative overflow-hidden group">
+      <div className="flex items-start justify-between relative z-10">
+        <div>
+          <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
+          <h3 className="text-3xl font-bold text-white mb-1 tracking-tight">
+            {value}
+          </h3>
+          {subtitle && (
+            <p className="text-xs text-[#00F0FF] font-medium flex items-center gap-1">
+              {subtitle}
+            </p>
+          )}
         </div>
-        {trend && (
-          <div className={`flex items-center gap-1 text-sm font-medium ${trend > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-            {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
-          </div>
-        )}
+        <div className="p-3 rounded-xl bg-[#00F0FF]/10 text-[#00F0FF] group-hover:bg-[#00F0FF]/20 group-hover:scale-110 transition-all duration-300">
+          <span className="text-2xl">{icon}</span>
+        </div>
       </div>
 
-      <div>
-        <h3 className="text-muted-foreground text-sm font-medium mb-1">{title}</h3>
-        <div className="text-2xl font-bold text-foreground mb-1">{value}</div>
-        {subtitle && <p className="text-xs text-muted-foreground/80">{subtitle}</p>}
-      </div>
-
-      {/* Background Decoration */}
-      <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
-    </GlassCard>
+      {/* Decorative background glow */}
+      <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-[#00F0FF]/10 rounded-full blur-2xl group-hover:bg-[#00F0FF]/20 transition-all duration-500" />
+    </PremiumCard>
   );
 };
 
 export const StatsGrid = ({ stats }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {stats.map((stat, index) => (
-        <StatsCard key={index} {...stat} />
+        <StatsCard
+          key={index}
+          {...stat}
+          delay={index * 0.1}
+        />
       ))}
     </div>
   );

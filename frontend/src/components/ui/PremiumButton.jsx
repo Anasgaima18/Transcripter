@@ -1,33 +1,49 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 
-const PremiumButton = ({
-    children,
-    onClick,
-    variant = 'primary',
-    className = "",
-    disabled = false,
-    type = "button"
-}) => {
-    const baseStyles = "relative overflow-hidden rounded-xl px-6 py-3 font-medium transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
+const PremiumButton = ({ children, onClick, className = "", variant = "primary", type = "button", disabled = false }) => {
+    const ref = useRef(null);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+
+    const handleMouseMove = (e) => {
+        const { clientX, clientY } = e;
+        const { left, top, width, height } = ref.current.getBoundingClientRect();
+        const x = (clientX - (left + width / 2)) * 0.2; // Magnetic strength
+        const y = (clientY - (top + height / 2)) * 0.2;
+        setPosition({ x, y });
+    };
+
+    const handleMouseLeave = () => {
+        setPosition({ x: 0, y: 0 });
+    };
 
     const variants = {
-        primary: "bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/25",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        outline: "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        glass: "glass hover:bg-white/20 text-foreground",
-        gradient: "bg-gradient-to-r from-blue-600 to-violet-600 text-white hover:shadow-lg hover:shadow-blue-500/25 border-none"
+        primary: "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)]",
+        secondary: "bg-secondary text-secondary-foreground shadow-[0_0_20px_rgba(112,0,255,0.4)] hover:shadow-[0_0_30px_rgba(112,0,255,0.6)]",
+        outline: "border border-primary/50 text-primary hover:bg-primary/10",
+        ghost: "text-muted-foreground hover:text-foreground hover:bg-white/5"
     };
 
     return (
-        <button
+        <motion.button
+            ref={ref}
             type={type}
             onClick={onClick}
             disabled={disabled}
-            className={`${baseStyles} ${variants[variant]} ${className}`}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            animate={{ x: position.x, y: position.y }}
+            transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`
+        relative px-8 py-3 rounded-xl font-semibold tracking-wide transition-all duration-300
+        disabled:opacity-50 disabled:cursor-not-allowed
+        ${variants[variant]}
+        ${className}
+      `}
         >
             {children}
-        </button>
+        </motion.button>
     );
 };
 

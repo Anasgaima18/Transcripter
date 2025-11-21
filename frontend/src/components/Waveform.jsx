@@ -48,7 +48,7 @@ const Waveform = ({ isRecording, audioLevel = 0.5 }) => {
         {bars.map((bar) => (
           <div
             key={bar.id}
-            className="flex-1 rounded-full bg-gradient-to-t from-indigo-500 to-purple-500 transition-[height] duration-100 ease-linear opacity-80 hover:opacity-100"
+            className="flex-1 rounded-full bg-gradient-to-t from-[#00F0FF] to-[#7000FF] transition-[height] duration-100 ease-linear opacity-80 hover:opacity-100 shadow-[0_0_10px_rgba(0,240,255,0.3)]"
             style={{
               height: `${bar.height}%`,
               minHeight: '10%'

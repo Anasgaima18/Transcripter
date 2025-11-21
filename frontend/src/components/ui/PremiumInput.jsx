@@ -1,40 +1,22 @@
 import React from 'react';
 
-const PremiumInput = ({
-    label,
-    type = "text",
-    placeholder = "",
-    value,
-    onChange,
-    className = "",
-    id
-}) => {
+const PremiumInput = ({ label, id, type = "text", ...props }) => {
     return (
-        <div className={`relative group ${className}`}>
-            {label && (
-                <label
-                    htmlFor={id}
-                    className="block text-sm font-medium text-muted-foreground mb-2 ml-1"
-                >
-                    {label}
-                </label>
-            )}
+        <div className="relative group">
             <input
                 id={id}
                 type={type}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                className="
-          w-full px-4 py-3 rounded-xl
-          bg-white/5 border border-white/10
-          text-foreground placeholder:text-muted-foreground/50
-          focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50
-          transition-all duration-300
-          glass
-        "
+                className="peer w-full bg-transparent border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder-transparent focus:outline-none focus:border-primary focus:shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all duration-300"
+                placeholder={label}
+                {...props}
             />
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 -z-10 blur-xl" />
+            <label
+                htmlFor={id}
+                className="absolute left-4 -top-2.5 bg-[#050511] px-1 text-sm text-muted-foreground transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-muted-foreground peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-primary peer-focus:text-sm"
+            >
+                {label}
+            </label>
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 peer-focus:opacity-100 pointer-events-none transition-opacity duration-500 blur-xl -z-10" />
         </div>
     );
 };

@@ -22,10 +22,10 @@ const Sidebar = () => {
     return (
         <aside className="fixed left-4 top-4 bottom-4 w-64 glass rounded-3xl p-6 flex flex-col z-50 hidden md:flex">
             <div className="flex items-center gap-3 px-2 mb-10">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-background font-bold text-xl shadow-[0_0_20px_rgba(0,255,128,0.3)]">
                     T
                 </div>
-                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+                <span className="text-xl font-bold tracking-wide text-foreground">
                     Transcripter
                 </span>
             </div>

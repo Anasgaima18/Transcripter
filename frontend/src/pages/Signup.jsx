@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
-import GlassCard from "../components/ui/GlassCard";
+import PremiumCard from "../components/ui/PremiumCard";
 import PremiumButton from "../components/ui/PremiumButton";
 import PremiumInput from "../components/ui/PremiumInput";
+// import ThreeBackground from "../components/ThreeBackground";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -58,85 +59,104 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden selection:bg-primary/30">
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-pink-500/20 blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-500/20 blur-[100px] animate-pulse delay-1000" />
+    <div className="min-h-screen flex bg-[#050511] text-foreground overflow-hidden">
+      {/* Left Side - 3D Art */}
+      <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center bg-[#050511]">
+        {/* <ThreeBackground /> */}
+        <div className="relative z-10 text-center p-12">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-5xl font-bold mb-6 text-[#7000FF] drop-shadow-[0_0_15px_rgba(112,0,255,0.5)]"
+          >
+            Join the Future
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-xl text-gray-400 max-w-md mx-auto"
+          >
+            Create your account and start transcribing with AI precision.
+          </motion.p>
+        </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md p-4 relative z-10"
-      >
-        <GlassCard className="p-8 border-white/10">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-indigo-600 mb-2">
-              Create Account
-            </h1>
-            <p className="text-muted-foreground">Join Transcripter today</p>
-          </div>
-
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl mb-6 text-sm">
-              {error}
+      {/* Right Side - Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
+          <PremiumCard className="p-10 border-white/5 bg-[#0A0A23]/50 backdrop-blur-3xl">
+            <div className="text-center mb-10 lg:hidden">
+              <h1 className="text-3xl font-bold text-[#7000FF] mb-2">Transcripter</h1>
+              <p className="text-muted-foreground">Create your account</p>
             </div>
-          )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <PremiumInput
-              label="Username"
-              type="text"
-              name="username"
-              placeholder="Choose a username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-            <PremiumInput
-              label="Email Address"
-              type="email"
-              name="email"
-              placeholder="name@example.com"
-              value={formData.email}
-              onChange={handleChange}
-            />
-            <PremiumInput
-              label="Password"
-              type="password"
-              name="password"
-              placeholder="Min 6 characters"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <PremiumInput
-              label="Confirm Password"
-              type="password"
-              name="confirmPassword"
-              placeholder="Re-enter password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
+            <div className="mb-8">
+              <h2 className="text-2xl font-semibold text-white mb-2">Sign Up</h2>
+              <p className="text-gray-400 text-sm">Enter your details to get started</p>
+            </div>
 
-            <PremiumButton
-              type="submit"
-              variant="gradient"
-              className="w-full py-4 text-lg shadow-lg shadow-pink-500/25 from-pink-500 to-indigo-600"
-              disabled={loading}
-            >
-              {loading ? "Creating Account..." : "Sign Up Free"}
-            </PremiumButton>
-          </form>
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl mb-6 text-sm">
+                {error}
+              </div>
+            )}
 
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link to="/login" className="text-primary hover:text-primary/80 font-medium transition-colors">
-              Sign in
-            </Link>
-          </div>
-        </GlassCard>
-      </motion.div>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <PremiumInput
+                label="Username"
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+              <PremiumInput
+                label="Email Address"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <PremiumInput
+                label="Password"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <PremiumInput
+                label="Confirm Password"
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+
+              <PremiumButton
+                type="submit"
+                variant="secondary"
+                className="w-full py-4 text-lg shadow-[0_0_20px_rgba(112,0,255,0.3)]"
+                disabled={loading}
+              >
+                {loading ? "Creating Account..." : "Sign Up Free"}
+              </PremiumButton>
+            </form>
+
+            <div className="mt-8 text-center text-sm text-gray-400">
+              Already have an account?{" "}
+              <Link to="/login" className="text-[#7000FF] hover:text-[#7000FF]/80 font-medium transition-colors">
+                Sign in
+              </Link>
+            </div>
+          </PremiumCard>
+        </motion.div>
+      </div>
     </div>
   );
 };

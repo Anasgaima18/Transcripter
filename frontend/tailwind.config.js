@@ -8,79 +8,72 @@ export default {
         extend: {
             fontFamily: {
                 sans: [
+                    "Inter",
                     "SF Pro Display",
                     "-apple-system",
                     "BlinkMacSystemFont",
                     "Segoe UI",
                     "Roboto",
-                    "Oxygen",
-                    "Ubuntu",
-                    "Cantarell",
-                    "Open Sans",
-                    "Helvetica Neue",
                     "sans-serif",
                 ],
             },
             colors: {
-                background: "var(--background)",
-                foreground: "var(--foreground)",
+                background: "#050511", // Deep Dark Blue/Black
+                foreground: "#F8FAFC",
                 primary: {
-                    DEFAULT: "var(--primary)",
-                    foreground: "var(--primary-foreground)",
+                    DEFAULT: "#00F0FF", // Neon Cyan
+                    foreground: "#050511",
                 },
                 secondary: {
-                    DEFAULT: "var(--secondary)",
-                    foreground: "var(--secondary-foreground)",
+                    DEFAULT: "#7000FF", // Deep Purple
+                    foreground: "#F8FAFC",
                 },
                 muted: {
-                    DEFAULT: "var(--muted)",
-                    foreground: "var(--muted-foreground)",
-                },
-                accent: {
-                    DEFAULT: "var(--accent)",
-                    foreground: "var(--accent-foreground)",
+                    DEFAULT: "#0A0A23", // Slightly lighter dark blue
+                    foreground: "#94A3B8",
                 },
                 card: {
-                    DEFAULT: "var(--card)",
-                    foreground: "var(--card-foreground)",
+                    DEFAULT: "#0A0A23",
+                    foreground: "#F8FAFC",
                 },
-                border: "var(--border)",
-                input: "var(--input)",
-                ring: "var(--ring)",
+                border: "rgba(255, 255, 255, 0.1)",
+                input: "rgba(255, 255, 255, 0.05)",
             },
             borderRadius: {
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)",
+                '2xl': '1.5rem',
+                '3xl': '2rem',
+            },
+            boxShadow: {
+                'neon-cyan': '0 0 20px rgba(0, 240, 255, 0.5)',
+                'neon-purple': '0 0 20px rgba(112, 0, 255, 0.5)',
+                'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
             },
             keyframes: {
-                "accordion-down": {
-                    from: { height: "0" },
-                    to: { height: "var(--radix-accordion-content-height)" },
-                },
-                "accordion-up": {
-                    from: { height: "var(--radix-accordion-content-height)" },
-                    to: { height: "0" },
-                },
                 "fade-in": {
                     "0%": { opacity: "0" },
                     "100%": { opacity: "1" },
                 },
-                "fade-out": {
-                    "0%": { opacity: "1" },
-                    "100%": { opacity: "0" },
-                },
-                "slide-in-from-bottom": {
+                "slide-up": {
                     "0%": { transform: "translateY(20px)", opacity: "0" },
                     "100%": { transform: "translateY(0)", opacity: "1" },
                 },
+                "pulse-glow": {
+                    "0%, 100%": { opacity: "1", transform: "scale(1)" },
+                    "50%": { opacity: "0.8", transform: "scale(1.05)" },
+                },
+                "float": {
+                    "0%, 100%": { transform: "translateY(0)" },
+                    "50%": { transform: "translateY(-10px)" },
+                },
             },
             animation: {
-                "accordion-down": "accordion-down 0.2s ease-out",
-                "accordion-up": "accordion-up 0.2s ease-out",
                 "fade-in": "fade-in 0.5s ease-out",
-                "fade-out": "fade-out 0.5s ease-out",
-                "slide-in": "slide-in-from-bottom 0.6s ease-out",
+                "slide-up": "slide-up 0.6s ease-out",
+                "pulse-glow": "pulse-glow 3s infinite ease-in-out",
+                "float": "float 6s ease-in-out infinite",
             },
         },
     },
